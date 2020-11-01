@@ -1,4 +1,4 @@
-# FnuoOS_FNMSF_Translator_Tools
+# Translator_Tools
 
 ## 要求
 python3.6 +
