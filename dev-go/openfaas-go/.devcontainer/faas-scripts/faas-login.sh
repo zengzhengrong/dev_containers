@@ -1,0 +1,1 @@
+source /tmp/faas-scripts/set_gateway_env.sh && /tmp/faas-scripts/login_faas.sh

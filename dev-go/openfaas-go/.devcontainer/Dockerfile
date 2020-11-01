@@ -1,7 +1,15 @@
 # Update the VARIANT arg in devcontainer.json to pick an Go version
 ARG VARIANT=1
+ARG COMPOSE_VERISON=1.27.4
+# Get openfaas-cli
+FROM openfaas/faas-cli:latest as build
+
 FROM golang:${VARIANT}
 
+# [Option] Enable non-root Docker access in container
+ARG ENABLE_NONROOT_DOCKER="true"
+ARG SOURCE_SOCKET=/var/run/docker-host.sock
+ARG TARGET_SOCKET=/var/run/docker.sock
 
 ENV GOPROXY=https://goproxy.cn
 # Options for setup script
@@ -11,44 +19,48 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 ADD sources.list /etc/apt/sources.list
-ADD faas-cli /usr/local/bin/
+# ADD faas-cli /usr/local/bin/
 ADD config /root/.kube/
 
-RUN echo 192.30.255.112	gist.github.com >> /etc/hosts
-RUN echo 192.30.255.112	github.com >> /etc/hosts
-RUN echo 192.30.255.112	www.github.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars0.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars1.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars2.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars3.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars4.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars5.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars6.githubusercontent.com >> /etc/hosts
-RUN echo 51.101.56.133	avatars7.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	avatars8.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	camo.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	cloud.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	gist.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	marketplace-screenshots.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.228.133 raw.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	repository-images.githubusercontent.com >> /etc/hosts
-RUN echo 151.101.56.133	user-images.githubusercontent.com >> /etc/hosts
+
+RUN echo 140.82.112.4	gist.github.com >> /etc/hosts \
+&& echo 140.82.112.4	github.com >> /etc/hosts \ 
+&& echo 140.82.112.4	www.github.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars0.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars1.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars2.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars3.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars4.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars5.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars6.githubusercontent.com >> /etc/hosts \
+&& echo 51.101.56.133	avatars7.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	avatars8.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	camo.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	cloud.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	gist.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	marketplace-screenshots.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.228.133 raw.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	repository-images.githubusercontent.com >> /etc/hosts \
+&& echo 151.101.56.133	user-images.githubusercontent.com >> /etc/hosts
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 COPY library-scripts/*.sh /tmp/library-scripts/
 COPY library-scripts/.oh-my-zsh /root/
 COPY faas-scripts/* /tmp/faas-scripts/
-COPY kubernetes-client.tar.gz /root/
+# COPY kubernetes-client.tar.gz /root/
+## copy faas-cli
+COPY --from=build /home/app /usr/bin/
 
-RUN tar xzvf /root/kubernetes-client.tar.gz
+RUN chmod -R 777 /tmp/library-scripts/
 
-RUN chmod -R 777 /tmp/library-scripts/ \
-    && chmod +x /go/kubernetes/client/bin/kubectl
-
-RUN mv /go/kubernetes/client/bin/kubectl /usr/local/bin
-
-RUN apt-get update \
+# Move login shell to usr/local/bin
+RUN mv /tmp/faas-scripts/faas-login.sh /usr/local/bin
+RUN curl -s https://mirrors.huaweicloud.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
+RUN apt-get update --fix-missing\
     && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
-    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
+    && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${SOURCE_SOCKET}" "${TARGET_SOCKET}" "${USERNAME}" "${COMPOSE_VERISON}" \
+    && /bin/bash /tmp/library-scripts/install-kubectl.sh \
+    && /bin/bash /tmp/library-scripts/install-helm.sh \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 
 # Install Go tools
 ARG GO_TOOLS_WITH_MODULES="\
@@ -91,6 +103,9 @@ RUN mkdir -p /tmp/gotools \
     && rm -rf /tmp/gotools
 
 ENV GO111MODULE=auto
+
+
+ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 
 # [Optional] Uncomment the next line to use go get to install anything else you need
 # RUN go get -x <your-dependency-or-tool>

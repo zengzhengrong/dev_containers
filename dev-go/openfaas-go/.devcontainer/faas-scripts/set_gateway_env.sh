@@ -1,1 +1,1 @@
-export OPENFAAS_URL=https://<your-gateway-url>
+export OPENFAAS_URL=127.0.0.1:8000

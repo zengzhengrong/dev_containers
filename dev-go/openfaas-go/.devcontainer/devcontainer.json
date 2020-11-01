@@ -5,29 +5,37 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		// Update the VARIANT arg to pick a version of Go
-		"args": { "VARIANT": "1" }
+		"args": {
+			"VARIANT": "1",
+			"DOCKER-COMPOSE-VERSION": "1.27.4"
+		}
 	},
-	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
-
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
+	"runArgs": [
+		"--cap-add=SYS_PTRACE",
+		"--security-opt",
+		"seccomp=unconfined"
+	],
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash",
 		"go.useGoProxyToCheckForToolUpdates": false,
 		"go.gopath": "/go"
 	},
-	
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"golang.Go",
-		"bernardxiong.env-vscode"
+		"bernardxiong.env-vscode",
+		"ms-azuretools.vscode-docker"
 	],
-
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [5000],
-
+	"forwardPorts": [
+		5000
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "go version",
-
+	// "postCreateCommand": "bash /tmp/faas-scripts/faas-login.sh",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
 }
