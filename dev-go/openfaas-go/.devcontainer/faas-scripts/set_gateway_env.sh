@@ -1,0 +1,1 @@
+export OPENFAAS_URL=https://<your-gateway-url>

@@ -1,0 +1,34 @@
+syntax = "proto3";
+package sumpb;
+
+option go_package = ".;sum";
+
+// uncomment for inline HTTP desc google.api.http
+import "google/api/annotations.proto";
+
+service Summator {
+  rpc Sum(SumRequest) returns (SumResponse) {
+    option (google.api.http) = {
+                                // uncomment get or post+body or use YAML annotation
+                                //get: "/v1/example/sum/{a}/{b}"
+                                post: "/v1/example/sum/{a}"
+                                body: "b"
+    };
+  }
+}
+// SumRequest is a request for Summator service.
+message SumRequest {
+  // A is the number we're adding to. Can't be zero for the sake of example.
+  int64 a = 1;
+  // B is the number we're adding.
+  NestedB b = 2;
+}
+
+message SumResponse {
+  int64 sum = 1;
+  string error = 2;
+}
+
+message NestedB {
+  int64 b = 1;
+}

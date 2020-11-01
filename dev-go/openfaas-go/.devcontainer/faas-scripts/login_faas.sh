@@ -1,0 +1,1 @@
+cat /tmp/faas-scripts/faas_pass.txt | faas-cli login -u admin --password-stdin
