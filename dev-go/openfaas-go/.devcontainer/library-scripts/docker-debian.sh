@@ -23,7 +23,7 @@ apt-get-update-if-needed()
 {
     if [ ! -d "/var/lib/apt/lists" ] || [ "$(ls /var/lib/apt/lists/ | wc -l)" = "0" ]; then
         echo "Running apt-get update..."
-        apt-get update
+        apt-get -o Acquire::Check-Valid-Until=false update
     else
         echo "Skipping apt-get update."
     fi
@@ -44,7 +44,7 @@ if type docker > /dev/null 2>&1; then
 else
     curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]')/gpg | (OUT=$(apt-key add - 2>&1) || echo $OUT)
     echo "deb [arch=amd64] https://mirrors.ustc.edu.cn/docker-ce/linux/$(lsb_release -is | tr '[:upper:]' '[:lower:]') $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list
-    apt-get update --fix-missing
+    apt-get -o Acquire::Check-Valid-Until=false update --fix-missing
     apt-get -y install --no-install-recommends docker-ce-cli
 fi
 

@@ -55,7 +55,7 @@ RUN chmod -R 777 /tmp/library-scripts/
 # Move login shell to usr/local/bin
 RUN mv /tmp/faas-scripts/faas-login.sh /usr/local/bin
 RUN curl -s https://mirrors.huaweicloud.com/kubernetes/apt/doc/apt-key.gpg | apt-key add -
-RUN apt-get update --fix-missing\
+RUN apt-get -o Acquire::Check-Valid-Until=false update --fix-missing\
     && /bin/bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
     && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${SOURCE_SOCKET}" "${TARGET_SOCKET}" "${USERNAME}" "${COMPOSE_VERISON}" \
     && /bin/bash /tmp/library-scripts/install-kubectl.sh \
