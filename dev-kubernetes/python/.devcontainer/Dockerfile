@@ -33,6 +33,11 @@ RUN apt-get update && apt-get install -y apt-transport-https
 RUN apt-get -o Acquire::Check-Valid-Until=false update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends kubectl kubectx
 
+# aliases
+RUN echo alias kl='kubectl' >> ~/.bashrc && \
+    echo alias kx='kubectx' >> ~/.bashrc && \
+    echo alias kn='kubens' >> ~/.bashrc
+
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
