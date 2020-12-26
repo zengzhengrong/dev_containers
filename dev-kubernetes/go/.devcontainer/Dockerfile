@@ -4,6 +4,12 @@
 ARG VARIANT="1"
 FROM registry.cn-hangzhou.aliyuncs.com/newbe36524/vscode_go:0-${VARIANT}
 
+
+# 直接从dockerhub下载kubectl kubectx kubens
+COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectx /usr/local/bin/kubectx
+COPY --from=binbash/k8s-kubectx /usr/local/bin/kubens /usr/local/bin/kubens
+COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectl /usr/local/bin/kubectl
+
 # Config sources list
 ADD sources.list /etc/apt/sources.list
 
@@ -27,11 +33,12 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "source /usr/local/shar
 #    && rm -rf /tmp/pip-tmp
 
 
-RUN curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
-RUN apt-get update && apt-get install -y apt-transport-https
+# RUN apt update --allow-insecure-repositories
+# RUN curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+# RUN apt-get update && apt-get install -y apt-transport-https
 # [Optional] Uncomment this section to install additional OS packages.
-RUN apt-get -o Acquire::Check-Valid-Until=false update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends kubectl kubectx
+# RUN apt-get -o Acquire::Check-Valid-Until=false update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends kubectl kubectx
 
 # aliases
 RUN echo alias kl='kubectl' >> ~/.bashrc && \
