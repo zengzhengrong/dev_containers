@@ -10,6 +10,10 @@ COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectx /usr/local/bin/kubectx
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubens /usr/local/bin/kubens
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectl /usr/local/bin/kubectl
 
+# ADD go proxy
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.cn,direct
+
 # Config sources list
 ADD sources.list /etc/apt/sources.list
 
