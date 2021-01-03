@@ -1,1 +1,1 @@
-FROM registry.cn-shenzhen.aliyuncs.com/zzr/dev:flutter
+FROM zengzhengrong889/flutter:dev

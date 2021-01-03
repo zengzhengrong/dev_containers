@@ -7,9 +7,13 @@
 			"VARIANT": "1",
 			// Options
 			"INSTALL_NODE": "false",
-			"NODE_VERSION": "lts/*"
+			"NODE_VERSION": "lts/*",
+			"DOCKER-COMPOSE-VERSION": "1.27.4"
 		}
 	},
+	"mounts": [
+		"source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"
+	],
 	"runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
 
 	// Set *default* container specific settings.json values on container create.
@@ -32,13 +36,13 @@
 		"tim-koehler.helm-intellisense",
 		"technosophos.vscode-helm",
 		"vscode-icons-team.vscode-icons"
-	]
+	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	"postCreateCommand": "echo '192.168.1.152 localhost' >> /etc/hosts",
 
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"

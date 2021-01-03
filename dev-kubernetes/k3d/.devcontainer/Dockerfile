@@ -2,23 +2,38 @@
 
 # [Choice] Python version: 3, 3.9, 3.8, 3.7, 3.6
 ARG VARIANT="1"
+ARG COMPOSE_VERISON=1.27.4
 FROM registry.cn-hangzhou.aliyuncs.com/newbe36524/vscode_go:0-${VARIANT}
 
+
+ENV TZ=Asia/Shanghai
 
 # download kubectl kubectx kubens from dockerhub
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectx /usr/local/bin/kubectx
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubens /usr/local/bin/kubens
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectl /usr/local/bin/kubectl
+# download k3d from dockerhub
+COPY --from=rancher/k3d /bin/k3d /usr/local/bin/k3d
+COPY --from=rancher/k3d-tools /app/k3d-tools /usr/local/bin/k3d-tools
+# Config sources list
+ADD sources.list /etc/apt/sources.list
+ADD registries.yaml /etc/rancher/k3d/registries.yaml
+# [Option] Enable non-root Docker access in container
+ARG ENABLE_NONROOT_DOCKER="true"
+ARG SOURCE_SOCKET=/var/run/docker-host.sock
+ARG TARGET_SOCKET=/var/run/docker.sock
 
+COPY library-scripts/*.sh /tmp/library-scripts/
+
+RUN apt-get -o Acquire::Check-Valid-Until=false update --fix-missing\
+    && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${SOURCE_SOCKET}" "${TARGET_SOCKET}" "root" "${COMPOSE_VERISON}" \
+    && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 # ADD go proxy
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
 
-# Config sources list
-ADD sources.list /etc/apt/sources.list
 
-# Conifg kubernetes
-ADD config /root/.kube/
+
 
 # Install helm
 RUN wget https://mirrors.huaweicloud.com/helm/v3.4.0/helm-v3.4.0-linux-amd64.tar.gz \ 
@@ -47,8 +62,8 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "source /usr/local/shar
 # aliases
 RUN echo alias kl='kubectl' >> ~/.bashrc && \
     echo alias kx='kubectx' >> ~/.bashrc && \
-    echo alias kn='kubens' >> ~/.bashrc
-
+    echo alias kn='kubens' >> ~/.bashrc && \
+    echo alias kd='k3d' >> ~/.bashrc
 # Install Go tools
 ARG GO_TOOLS_WITH_MODULES="\
     golang.org/x/tools/gopls \
@@ -90,6 +105,7 @@ RUN mkdir -p /tmp/gotools \
     # && mv gocode-gomod /usr/local/bin/ \
     && rm -rf /tmp/gotools
 
+ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
