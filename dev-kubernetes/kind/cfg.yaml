@@ -22,14 +22,32 @@ nodes:
     hostPort: 443
     protocol: TCP
 - role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "role=work1"
   extraMounts:
-  - hostPath: ./data/work1
+  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work1
     containerPath: /var/local-path-provisioner
 - role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "role=work2"
   extraMounts:
-  - hostPath: ./data/work2
+  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work2
     containerPath: /var/local-path-provisioner
 - role: worker
+  kubeadmConfigPatches:
+  - |
+    kind: JoinConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "role=work3"
   extraMounts:
-  - hostPath: ./data/work3
+  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work3
     containerPath: /var/local-path-provisioner
