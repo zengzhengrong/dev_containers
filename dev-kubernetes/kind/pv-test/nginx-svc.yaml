@@ -1,41 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: "2021-01-05T15:34:17Z"
   labels:
     app: nginx
-  managedFields:
-  - apiVersion: v1
-    fieldsType: FieldsV1
-    fieldsV1:
-      f:metadata:
-        f:labels:
-          .: {}
-          f:app: {}
-      f:spec:
-        f:ports:
-          .: {}
-          k:{"port":80,"protocol":"TCP"}:
-            .: {}
-            f:name: {}
-            f:port: {}
-            f:protocol: {}
-            f:targetPort: {}
-        f:selector:
-          .: {}
-          f:app: {}
-        f:sessionAffinity: {}
-        f:type: {}
-    manager: kubectl
-    operation: Update
-    time: "2021-01-05T15:34:17Z"
   name: nginx
   namespace: default
-  resourceVersion: "2844"
-  selfLink: /api/v1/namespaces/default/services/nginx
-  uid: ed14f43a-c75e-4208-947a-f5c96a467c2a
 spec:
-  clusterIP: 10.96.239.146
   ports:
   - name: 80-80
     port: 80
@@ -43,7 +13,4 @@ spec:
     targetPort: 80
   selector:
     app: nginx
-  sessionAffinity: None
   type: ClusterIP
-status:
-  loadBalancer: {}
