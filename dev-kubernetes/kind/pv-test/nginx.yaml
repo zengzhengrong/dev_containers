@@ -26,7 +26,6 @@ spec:
       - image: nginx
         imagePullPolicy: Always
         name: nginx
-        resources: 
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         volumeMounts:
