@@ -48,7 +48,7 @@ spec:
                 number: 80
 ```
 
-k8s v1.19 issues
+### k8s v1.19 issues
 
 kl logs ks-controller-manager-648657b54d-7svzh -n kubesphere-system
 
@@ -62,6 +62,11 @@ solve
 kubectl apply -f kubesphere/
 kubectl -n kubesphere-system rollout restart deploy ks-controller-manager
 ```
+
+
+### Enable Plugin
+
+config cluster-configuration and set true for plugin
 
 
 
