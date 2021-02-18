@@ -1,3 +1,83 @@
+## Install Kind
+
+```
+kind create cluster --config .devcontainer/config.yaml 
+```
+
+## Install ingress
+```
+kl apply -f .devcontainer/deploy-ingress.yaml
+```
+
+## Install cert-manager
+```
+kubectl create namespace cert-manager
+helm repo add jetstack https://charts.jetstack.io
+helm repo update
+helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.1.0 \
+  --set installCRDs=true \
+  --set cainjector.image.repository=zengzhengrong889/cert-manager \
+  --set cainjector.image.tag=v1.1.0
+```
+
+update 
+
+```
+helm upgrade \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.1.0 \
+  --set installCRDs=true \
+  --set cainjector.image.repository=oamdev/cert-manager-cainjector \
+  --set cainjector.image.tag=v1.1.0
+```
+
+## Install nfs server
+
+#### v4 
+```
+docker run -d --name nfs --privileged -p 2049:2049 -v /workspaces/dev_containers/dev-kubernetes/kind/nfs:/nfs -e SHARED_DIRECTORY=/nfs itsthenetwork/nfs-server-alpine:latest
+```
+if window ```-v``` use "\" instead "/" 
+
+```
+docker run -d --name nfs --privileged --net=kind --network-alias nfs-server-v4 -v /e/workspace/github/dev_containers/dev-kubernetes/kind/nfs:/nfs -e SHARED_DIRECTORY=/nfs itsthenetwork/nfs-server-alpine:latest
+```
+
+E:\workspace\github\dev_containers\dev-kubernetes\kind is /e/workspace/github/dev_containers/dev-kubernetes/kind
+
+#### v3
+```
+docker run -d --name nfs --privileged --net=kind --network-alias nfs-server-v3 --cap-add SYS_ADMIN -v /e/workspace/github/dev_containers/dev-kubernetes/kind/nfs:/nfs -e NFS_EXPORT_0='/nfs *(rw,fsid=0,async,no_subtree_check,no_auth_nlm,insecure,no_root_squash)' erichough/nfs-server
+```
+
+## Install nfs-client-provisioner
+
+https://github.com/kubernetes-sigs/nfs-subdir-external-provisioner
+
+helm install 
+```
+$ helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+$ helm install nfs-subdir-external-provisioner nfs-subdir-external-provisioner/nfs-subdir-external-provisioner \
+    --set nfs.server=x.x.x.x \
+    --set nfs.path=/exported/path
+```
+
+rancher Catalogs install 
+
+```
+tool -> catalogs -> add catalog -> catalog url https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/ -> helm version v3 -> create
+```
+
+
+## Install pgyvpn
+```
+docker run -d --net host --cap-add NET_ADMIN --env PGY_USERNAME="xxx" --env PGY_PASSWORD="xxx" bestoray/pgyvpn
+```
+
 ## Install kubernetes dashboard
 
 ```

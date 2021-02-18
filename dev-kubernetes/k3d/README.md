@@ -113,3 +113,34 @@ spec:
               number: 80
 EOF
 ```
+
+#### install rancher
+
+1.
+```
+helm install rancher rancher-latest/rancher \
+ --namespace cattle-system \
+ --set hostname=localhost
+```
+update 
+```
+helm upgrade rancher rancher-latest/rancher \
+ --namespace cattle-system \
+ --set hostname=localhost
+```
+
+2.
+```
+docker run -d --privileged --restart=unless-stopped \
+    -p 8080:80 -p 8443:443 \
+    rancher/rancher:latest
+```
+
+### install krew plugin
+
+```
+PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+```
+
+kl krew install tree images ns rbac-view rbac-view pod-inspect
+

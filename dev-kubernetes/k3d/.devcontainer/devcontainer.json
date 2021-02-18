@@ -1,5 +1,5 @@
 {
-	"name": "Go",
+	"name": "K3d",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {

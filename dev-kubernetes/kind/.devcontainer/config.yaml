@@ -26,10 +26,13 @@ nodes:
     hostPort: 80
     protocol: TCP
   - containerPort: 443
-    hostPort: 443
+    hostPort: 8443
+    protocol: TCP
+  - containerPort: 30000
+    hostPort: 30000
     protocol: TCP
   extraMounts:
-  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work1
+  - hostPath: data/work1
     containerPath: /var/local-path-provisioner
 - role: worker
   kubeadmConfigPatches:
@@ -39,8 +42,12 @@ nodes:
       kubeletExtraArgs:
         node-labels: "role=work2"
   extraMounts:
-  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work2
+  - hostPath: data/work2
     containerPath: /var/local-path-provisioner
+  extraPortMappings:
+  - containerPort: 30000
+    hostPort: 30001
+    protocol: TCP
 - role: worker
   kubeadmConfigPatches:
   - |
@@ -49,5 +56,9 @@ nodes:
       kubeletExtraArgs:
         node-labels: "role=work3"
   extraMounts:
-  - hostPath: /Users/zengzhengrong/Documents/GitHub/dev_containers/dev-kubernetes/kind/data/work3
+  - hostPath: data/work3
     containerPath: /var/local-path-provisioner
+  extraPortMappings:
+  - containerPort: 30000
+    hostPort: 30002
+    protocol: TCP

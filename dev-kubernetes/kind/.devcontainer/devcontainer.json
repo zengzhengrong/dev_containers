@@ -1,5 +1,5 @@
 {
-	"name": "Go",
+	"name": "Kind",
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {

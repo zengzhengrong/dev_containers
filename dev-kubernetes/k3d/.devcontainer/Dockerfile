@@ -24,9 +24,10 @@ ARG SOURCE_SOCKET=/var/run/docker-host.sock
 ARG TARGET_SOCKET=/var/run/docker.sock
 
 COPY library-scripts/*.sh /tmp/library-scripts/
-
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 RUN apt-get -o Acquire::Check-Valid-Until=false update --fix-missing\
     && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${SOURCE_SOCKET}" "${TARGET_SOCKET}" "root" "${COMPOSE_VERISON}" \
+    && /bin/bash /tmp/library-scripts/krew.sh \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
 # ADD go proxy
 ENV GO111MODULE=on
@@ -104,6 +105,8 @@ RUN mkdir -p /tmp/gotools \
     && mv /tmp/gotools/bin/* /usr/local/bin/ \
     # && mv gocode-gomod /usr/local/bin/ \
     && rm -rf /tmp/gotools
+
+RUN mv ~/.krew/bin/kubectl-krew /usr/local/bin/
 
 ENTRYPOINT [ "/usr/local/share/docker-init.sh" ]
 

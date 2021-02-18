@@ -27,7 +27,7 @@ ARG SOURCE_SOCKET=/var/run/docker-host.sock
 ARG TARGET_SOCKET=/var/run/docker.sock
 
 COPY library-scripts/*.sh /tmp/library-scripts/
-
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 RUN apt-get -o Acquire::Check-Valid-Until=false update --fix-missing\
     && /bin/bash /tmp/library-scripts/docker-debian.sh "${ENABLE_NONROOT_DOCKER}" "${SOURCE_SOCKET}" "${TARGET_SOCKET}" "root" "${COMPOSE_VERISON}" \
     && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts/
@@ -56,7 +56,7 @@ RUN if [ "${INSTALL_NODE}" = "true" ]; then su vscode -c "source /usr/local/shar
 
 
 # RUN apt update --allow-insecure-repositories
-# RUN curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
+
 # RUN apt-get update && apt-get install -y apt-transport-https
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get -o Acquire::Check-Valid-Until=false update && export DEBIAN_FRONTEND=noninteractive \
