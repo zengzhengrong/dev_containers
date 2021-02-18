@@ -36,7 +36,8 @@
 		"tim-koehler.helm-intellisense",
 		"technosophos.vscode-helm",
 		"vscode-icons-team.vscode-icons",
-		"ms-azuretools.vscode-docker"
+		"ms-azuretools.vscode-docker",
+		"ms-kubernetes-tools.kind-vscode"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
