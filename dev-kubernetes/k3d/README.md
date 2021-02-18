@@ -73,6 +73,15 @@ check
 docker exec -it <container id> cat /etc/rancher/k3s/registries.yaml
 ```
 
+update kubeconfig 0.0.0.0 to localhost
+
+```
+apiVersion: v1
+clusters:
+- cluster:
+    server: https://localhost:38381 # 0.0.0.0 to localhost
+  name: k3d-k3s-default
+```
 
 ### Use nginx ingress instead traefik
 
