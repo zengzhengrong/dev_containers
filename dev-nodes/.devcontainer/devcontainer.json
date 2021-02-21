@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.155.1/containers/docker-from-docker-compose
 {
-	"name": "Docker from Docker Compose",
+	"name": "dev-nodes",
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "node_master",
 	"workspaceFolder": "/workspace",
