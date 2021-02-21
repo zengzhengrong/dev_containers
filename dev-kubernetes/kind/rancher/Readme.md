@@ -36,4 +36,21 @@ helm install rancher rancher-latest/rancher \
  --set hostname=rancher.localhost
 ```
 
+check install 
+
+```
+kubectl -n cattle-system rollout status deploy/rancher
+```
+
+upgrade
+
+```
+helm upgrade rancher rancher-latest/rancher \
+ --namespace cattle-system \
+ --set hostname=rancher.localhost \
+ --set ingress.tls.source=letsEncrypt \
+ --set letsEncrypt.email=bhg889@163.com
+
+```
+
 ### Modify your hosts file 
