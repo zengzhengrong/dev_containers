@@ -1,2 +1,3 @@
 dev-kubernetes/.DS_Store
 .DS_Store
+dev-kubernetes/civo/rancher/rancher-ingress.yaml
