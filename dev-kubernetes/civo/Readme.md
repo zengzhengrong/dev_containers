@@ -10,4 +10,4 @@ helm
 
 civo apikey save <name> <apikey>
 
-civo apikey curremt <name>
+civo apikey current <name>
