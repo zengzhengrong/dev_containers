@@ -2,7 +2,7 @@
 
 # [Choice] Go version: 1, 1.15, 1.14
 ARG VARIANT="1"
-FROM registry.cn-hangzhou.aliyuncs.com/newbe36524/vscode_go:0-${VARIANT}
+FROM registry.cn-shenzhen.aliyuncs.com/zzr/dev:vscode-go-1.16
 
 ENV GOPROXY=https://goproxy.cn
 ADD sources.list /etc/apt/sources.list
