@@ -31,7 +31,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "git config --global http.https://github.com.proxy 192.168.2.109:4780 && git config --global https.https://github.com.proxy 192.168.2.109:4780 ",
+	// "postCreateCommand": "git config --global http.https://github.com.proxy 192.168.2.109:4780 && git config --global https.https://github.com.proxy 192.168.2.109:4780 ",
 	// Uncomment to connect as a non-root user. See https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
 }
