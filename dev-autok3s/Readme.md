@@ -3,6 +3,7 @@
 3个 work节点
 1个 测试节点
 ssh password root
+
 ### 将 master 节点 的ssh key 加入到其他节点 以用来免密登陆
 
 ```

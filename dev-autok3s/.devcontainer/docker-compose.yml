@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  node_master:
+    container_name: node-master-container
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      args:
+        USER_UID: 1000
+        USER_GID: 1000
+    init: true
+    privileged: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker-host.sock 
+      - ..:/workspace:cached
+  node1:
+    container_name: node1-container
+    image: registry.cn-shenzhen.aliyuncs.com/zzr/dev:ubuntu-focal-ssh
+    privileged: true
+    ports:
+      - "2201:22" 
+      - "8081:80" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - node1_data:/node1_data
+    depends_on:
+      - node_master
+  node2:
+    container_name: node2-container
+    image: registry.cn-shenzhen.aliyuncs.com/zzr/dev:ubuntu-focal-ssh
+    privileged: true
+    ports:
+      - "2202:22"
+      - "8082:80" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - node2_data:/node2_data
+    depends_on:
+      - node_master
+  node3:
+    container_name: node3-container
+    image: registry.cn-shenzhen.aliyuncs.com/zzr/dev:ubuntu-focal-ssh
+    privileged: true
+    ports:
+      - "2203:22"
+      - "8083:80" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - node3_data:/node3_data
+    depends_on:
+      - node_master
+  node_test:
+    container_name: node-test-container
+    image: registry.cn-shenzhen.aliyuncs.com/zzr/dev:ubuntu-focal-ssh
+    privileged: true
+    ports:
+      - "2204:22"
+      - "8084:80" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - node_test_data:/node_test_data
+    depends_on:
+      - node_master
+
+volumes:
+  node1_data:
+  node2_data:
+  node3_data:
+  node_test_data:
