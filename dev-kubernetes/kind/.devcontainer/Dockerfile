@@ -13,7 +13,7 @@ COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectx /usr/local/bin/kubectx
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubens /usr/local/bin/kubens
 COPY --from=binbash/k8s-kubectx /usr/local/bin/kubectl /usr/local/bin/kubectl
 # download kind from dockerhub
-COPY --from=abdennour/kind-cli /usr/local/bin/kind /usr/local/bin/kind
+COPY --from=abdennour/kind-cli:v0.10.0 /usr/local/bin/kind /usr/local/bin/kind
 
 # download helm from dockerhub
 
