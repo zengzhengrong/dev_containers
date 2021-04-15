@@ -1,0 +1,48 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   annotations:
+#     reloader.stakater.com/search: "true"
+#   labels:
+#     app: kuard
+#   name: kuard
+#   namespace: default
+# spec:
+#   replicas: 2
+#   revisionHistoryLimit: 10
+#   selector:
+#     matchLabels:
+#       app: kuard
+#   strategy:
+#     rollingUpdate:
+#       maxSurge: 25%
+#       maxUnavailable: 25%
+#     type: RollingUpdate
+#   template:
+#     metadata:
+#       labels:
+#         app: kuard
+#     spec:
+#       containers:
+#       - image: gcr.io/kuar-demo/kuard-amd64:1
+#         envFrom:
+#           - configMapRef:
+#               name: kuard-configmap
+#         imagePullPolicy: IfNotPresent
+#         name: kuard
+#         terminationMessagePath: /dev/termination-log
+#         terminationMessagePolicy: File
+#       dnsPolicy: ClusterFirst
+#       restartPolicy: Always
+#       schedulerName: default-scheduler
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    reloader.stakater.com/match: "true"
+  name: kuard-configmap
+data:
+  MAINTAINER: zengzhengrong
+
