@@ -1,0 +1,40 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/alpine
+{
+	"name": "Alpine",
+	"build": {
+	  "dockerfile": "Dockerfile",
+	  // Update 'VARIANT' to pick an Alpine version: 3.10, 3.11, 3.12, 3.13
+	  "args": { "VARIANT": "3.12" }
+	},
+	"mounts": [
+	  "source=C:\\Users\\pc\\.kube\\config,target=/root/.kube/config,type=bind"
+	],
+	// Set *default* container specific settings.json values on container create. 
+	"settings": {
+	  "terminal.integrated.shell.linux": "/bin/bash"
+	},
+  
+	// Add the IDs of extensions you want installed when the container is created.
+	// Note that some extensions may not work in Alpine Linux. See https://aka.ms/vscode-remote/linux.
+	"extensions": [
+	  "ms-kubernetes-tools.vscode-kubernetes-tools",
+	  "ipedrazas.kubernetes-snippets",
+	  "vscode-icons-team.vscode-icons"
+	],
+  
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+  
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"postCreateCommand": "echo '192.168.1.152 localhost' >> /etc/hosts"
+	// "echo "$(sed 's/0.0.0.0/localhost/' ~/.kube/config)" >> ~/.kube/config"
+	
+	
+  
+	// Uncomment when using a ptrace-based debugger like C++, Go, and Rust
+	// "runArgs": [ "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined" ],
+  
+	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode"
+  }
