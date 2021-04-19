@@ -21,8 +21,8 @@ services:
     command: sleep infinity
     
     links: 
-      - django-forum-redis
-  #     - django-forum-redis
+      - web-redis
+  #     - web-redis
   # db:
   #   container_name: django-postgres-container
   #   image: postgres
@@ -32,7 +32,7 @@ services:
   #   environment:
   #     POSTGRES_PASSWORD: 5432
 
-  django-forum-redis:
+  web-redis:
     container_name: redis-container
     ports:
       - "6379:6379"
