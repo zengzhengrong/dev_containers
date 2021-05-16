@@ -9,7 +9,7 @@ http://www.bluestacks.com/
 下载蓝叠国际版BlueStacks 4
 
 ##### 修改设备和打开adb
-设定 -> 设备 选择三星 S20 ultra
+设定 -> 设备 选择三星 S20 ultra  
 设定 -> 偏好设置  平台设置，打开adb 同时记住端口
 
 ### 在容器里面连接设备
